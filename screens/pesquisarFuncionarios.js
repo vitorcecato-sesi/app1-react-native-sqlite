@@ -111,7 +111,7 @@ export default function App() {
     }
     // Usando LIKE para pesquisar o cargo
     await executarConsulta('SELECT * FROM funcionarios WHERE cargo LIKE ?;', [
-      `%${searchText}%`,
+      `%${searchText}%`, // Sintaxe para conseguir usar o LIKE
     ]);
   };
 
