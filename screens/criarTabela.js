@@ -1,16 +1,23 @@
+// Importa React e hooks necessários
 import React, { useEffect, useState } from 'react';
+// Importa componentes do React Native para UI
 import { StyleSheet, Text, View, Alert, TouchableOpacity } from 'react-native';
+// Importa SQLite do Expo para trabalhar com banco de dados local
 import * as SQLite from 'expo-sqlite';
 
 export default function App() {
+  // Estado para mensagem de status (ex: sucesso, erro, etc)
   const [mensagem, setMensagem] = useState('Inicializando o banco de dados...');
+  // Estado para armazenar a referência do banco de dados
   const [db, setDb] = useState(null);
 
+  // useEffect roda uma vez ao montar o componente, inicializando o banco
   useEffect(() => {
     async function setupDatabase() {
       try {
+        // Abre (ou cria) o banco de dados chamado 'meu_banco.db'
         const database = await SQLite.openDatabaseAsync('meu_banco.db');
-        setDb(database);
+        setDb(database); // Salva referência do banco no estado
         setMensagem('✅ Conexão com o banco de dados estabelecida.');
       } catch (error) {
         console.error('Erro ao conectar com o banco de dados:', error);
@@ -20,7 +27,9 @@ export default function App() {
     setupDatabase();
   }, []);
 
+  // Função que cria a tabela 'funcionarios' no banco
   const criarTabela = async () => {
+    // Verifica se o banco foi inicializado
     if (!db) {
       setMensagem('❌ O banco de dados não está pronto.');
       Alert.alert('Erro', 'Banco de dados não foi inicializado.');
@@ -28,6 +37,7 @@ export default function App() {
     }
 
     try {
+      // Executa comando SQL para criar a tabela caso não exista
       await db.execAsync(`
         CREATE TABLE IF NOT EXISTS funcionarios (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,7 +55,7 @@ export default function App() {
     }
   };
 
-  // cor dinâmica dependendo do status (✅, ❌ ou neutro)
+  // Determina cor do status dinamicamente conforme a mensagem
   const statusColor =
     mensagem.startsWith('✅') ? styles.colors.success :
     mensagem.startsWith('❌') ? styles.colors.error :
@@ -54,8 +64,10 @@ export default function App() {
   return (
     <View style={styles.screen}>
       <View style={styles.card}>
+        {/* Título do card */}
         <Text style={styles.title}>Criar Tabela no Banco de Dados</Text>
 
+        {/* Botão para criar tabela, desabilitado se o banco não estiver pronto */}
         <TouchableOpacity
           style={[styles.button, !db && styles.buttonDisabled]}
           onPress={criarTabela}
@@ -67,8 +79,10 @@ export default function App() {
           </Text>
         </TouchableOpacity>
 
+        {/* Mensagem de status do banco/tabela */}
         <Text style={[styles.statusText, { color: statusColor }]}>{mensagem}</Text>
 
+        {/* Dica para o usuário */}
         <Text style={styles.hint}>
           Pressione o botão para criar a tabela. A tabela só será criada se a conexão com o banco estiver ativa.
         </Text>
@@ -77,16 +91,17 @@ export default function App() {
   );
 }
 
+// Estilos usados no componente
 const styles = StyleSheet.create({
   colors: {
-    success: '#16a34a', // verde
-    error: '#dc2626',   // vermelho
-    info: '#0ea5e9',    // azul claro
+    success: '#16a34a', // verde para sucesso
+    error: '#dc2626',   // vermelho para erro
+    info: '#0ea5e9',    // azul claro para neutro
     background: '#f3f6fb',
     cardBg: '#ffffff',
     textPrimary: '#0b1220',
     muted: '#6b7280',
-    buttonBg: '#2563eb', // azul botão
+    buttonBg: '#2563eb', // azul do botão
     buttonText: '#ffffff',
     disabledBg: '#cbd5e1',
   },
