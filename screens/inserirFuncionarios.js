@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 
-/*
-  Arquivo: Tela de adição de funcionário
-  Observação: comentários curtos e objetivos sobre as partes importantes do código.
-*/
-
 let db = null;
 
 // Abre o banco uma única vez e retorna a conexão (cache em `db`)
@@ -223,3 +218,4 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 });
+
