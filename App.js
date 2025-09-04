@@ -1,6 +1,5 @@
 // Importa o handler de gestos para garantir funcionamento do Drawer
 import 'react-native-gesture-handler';
-import React from 'react';
 // Importa componentes básicos do React Native
 import { View, Text, StyleSheet, Platform } from 'react-native';
 // Importa o root view do Gesture Handler para gestos complexos
@@ -50,11 +49,14 @@ function CustomDrawerContent(props) {
 export default function App() {
   return (
     // Root View necessário para gestos do Drawer
+    // 🚩 GestureHadlerRootView usamos para obter as animações mais avançadas do Drawer
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* Container de navegação */}
       <NavigationContainer>
         <Drawer.Navigator
+        // 🚩 Define a tela inicial do Drawer
           initialRouteName="Criar Banco"
+          // 🚩 O ...props recebe a estilização do Drawer total
           drawerContent={(props) => <CustomDrawerContent {...props} />}
           screenOptions={{
             // Estilização do cabeçalho das telas
